@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="CSS/payment-style.css">
+      <title>Payment</title>
+<style>
+      .navbar {
+        background-color: rgb(112, 85, 36);
+    }
+
+    .navbar h1 {
+        color: white;
+        
+    }
+    .nav-link {
+    color: white;
+    border-radius: 25px;
+    
+}
+body {
+    background-color:rgb(114, 113, 61);
+  }
+
+/* Add this to your CSS file or in a <style> tag in the head section */
+a.btn.btn-primary {
+    background-color: #8B4513; /* Brown color */
+    border-color: #8B4513; /* Matching border color */
+    color: #fff; /* Text color */
+}
+
+a.btn.btn-primary:hover {
+    background-color: #52392e; /* Darker brown on hover */
+    border-color: #080808;
+    color: #fff;
+}
+.navbar-nav > li{
+  padding-left:30px;
+  padding-right:30px;
+  font-size: 20px;
+}
+.navbar:hover {
+    background-color: #3d2413; /* Darker blue on hover */
+    border-color: #755035;
+    color: #fff;
+}
+/* Normal state styles */
+.navbar-nav > li > a {
+    color: white; /* Default text color */
+}
+
+/* Hover state styles */
+.navbar-nav > li > a:hover {
+    color: #ff9900; /* Text color on hover (change this color to your preference) */
+}
+
+</style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container__header d-flex align-items-center">
+           <h1><img src="logo.png" alt="Online Library Logo" height="60" radius="60%"> OLMS</h1>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+               
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="payment.html">Payment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   
+
+<!-- Payment Receipt Section -->
+<div class="container mt-5">
+    <h2>Payment Receipt</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody id="receiptItems">
+            <!-- Receipt items will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <div class="text-right">
+        <h4>Total Amount: <span id="totalAmount">0.00</span></h4>
+    </div>
+
+    <p>Thank you for your purchase!</p>
+
+    <!-- Add this element for order details -->
+    <p id="orderDetails"></p>
+
+    <a href="index.html" class="btn btn-primary">Return to Home</a>
+</div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    // Fetch payment details from localStorage
+    const receiptItems = JSON.parse(localStorage.getItem('cart')) || [];
+    displayReceiptItems(receiptItems);
+
+    // Update order details with today's date
+    const orderDetailsElement = document.getElementById('orderDetails');
+    const today = new Date();
+    const formattedDate = `${today.toDateString()} ${today.toLocaleTimeString()}`;
+    orderDetailsElement.textContent = `Your order: #BDU-808-25252001590 (${formattedDate})`;
+});
+
+async function displayReceiptItems(receiptItems) {
+    const receiptItemsContainer = document.getElementById('receiptItems');
+    const totalAmountElement = document.getElementById('totalAmount');
+
+    // Clear previous content
+    receiptItemsContainer.innerHTML = '';
+
+    // Display each item in the receipt
+    for (const item of receiptItems) {
+        // Fetch book details (including image URL) from the JSON file
+        const bookDetails = await fetchBookDetails(item.title);
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.title}</td>
+            <td>$${item.price.toFixed(2)}</td>
+        `;
+        receiptItemsContainer.appendChild(row);
+    }
+
+    // Calculate total amount
+    const totalAmount = receiptItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    totalAmountElement.textContent = `$${totalAmount.toFixed(2)}`;
+}
+
+async function fetchBookDetails(title) {
+    // Fetch book details from the JSON file based on the title
+    const response = await fetch('books.json');
+    const books = await response.json();
+    return books.find(book => book.title === title);
+}
+
+</script>
+</body>
+
+</html>
